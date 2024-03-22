@@ -2,7 +2,7 @@ import LeftMenu from '@/components/leftMenu';
 
 const Home = () => {
   return (
-    <body className="relative bg-blue-50 overflow-hidden h-screen w-screen">
+    <body className="relative bg-yellow-50 overflow-hidden h-screen w-screen">
       <LeftMenu />
 
       <main className="ml-60 pt-16 max-h-screen overflow-auto">
@@ -80,7 +80,7 @@ const Home = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-blue-100 rounded-xl text-gray-800">
+                    <div className="p-4 bg-yellow-100 rounded-xl text-gray-800">
                       <div className="font-bold text-2xl leading-none">20</div>
                       <div className="mt-2">Tasks finished</div>
                     </div>

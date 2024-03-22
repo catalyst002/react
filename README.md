@@ -1,10 +1,10 @@
-# sFriend.tech
+# Weave.tech
 
-This project is a clone of friend.tech build using stacks. 
+This project is a clone of friend.tech powered by Spiderchain. 
 
 # Video Demo
 
-link: https://youtu.be/INeiKFHWJpc?si=AUcngvN7NmrdHL9j
+link: ********
 
 <img width="1440" alt="Screenshot 2023-12-05 at 4 37 41 PM" src="https://github.com/Aman-zishan/friend.tech/assets/55238388/8cdc883d-c20b-4038-a832-19d6c4495349">
 

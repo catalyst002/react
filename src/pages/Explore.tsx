@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Explore = () => {
-  const { supabase, stxAddress, checkIsKeyHolder } = useConnect();
+  const { supabase, address, checkIsKeyHolder } = useConnect();
   const navigate = useNavigate();
   const [friends, setFriends] = React.useState([]);
   const [subjects, setSubjects] = React.useState([]);
@@ -15,9 +15,9 @@ const Explore = () => {
 
     if (status === 200) {
       const result = await Promise.all(
-        data!.map(async (chatRoom) => ({
+        data!.map(async (chatRoom: any) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, stxAddress!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
         }))
       );
 
@@ -49,7 +49,7 @@ const Explore = () => {
     <li
       className={`cursor-pointer px-4 py-2 text-sm font-medium text-center ${
         activeTab === id
-          ? 'border-b-2 border-blue-500 text-blue-600'
+          ? 'border-b-2 border-yellow-500 text-yellow-600'
           : 'text-gray-500 hover:text-gray-600'
       }`}
       onClick={() => setActiveTab(id)}
@@ -60,7 +60,7 @@ const Explore = () => {
   const [activeTab, setActiveTab] = useState<TabIdentifier>('friends');
 
   return (
-    <body className="relative bg-blue-50 overflow-hidden h-screen w-screen">
+    <body className="relative bg-yellow-50 overflow-hidden h-screen w-screen">
       <LeftMenu />
 
       <main className="ml-60 pt-16 h-screen overflow-auto">

@@ -1,149 +1,137 @@
-import { useAccount, useAuth, useOpenSignMessage } from '@micro-stacks/react';
-import { StacksDevnet } from '@stacks/network';
-import {
-  callReadOnlyFunction,
-  cvToValue,
-  getAddressFromPublicKey,
-  standardPrincipalCV
-} from '@stacks/transactions';
+import React, { useState, useEffect } from 'react';
+import { ethers } from 'ethers';
 import { createClient } from '@supabase/supabase-js';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchSTXBalance } from '../utils';
+import { createWeb3Modal, defaultConfig, useDisconnect, useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider} from '@web3modal/ethers/react';
+import { Web3Modal } from '@web3modal/ethers/dist/types/src/client';
 
-const message = 'Check if i am a keyholder ;)';
-const network = new StacksDevnet();
-
-// Define your authentication options here
-
-function useConnect() {
+const useConnect = () => {
   const navigate = useNavigate();
+  const [balance, setBalance] = useState("0");
 
-  const [balance, setBalance] = useState(0);
-  console.log(import.meta.env.VITE_SUPABASE_ANON_KEY);
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_PROJECT_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-  );
+   // Web3Modal instance
+  const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwcmx6bmV6aHh4d2dqYnR6b2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1Mjk3NjEsImV4cCI6MjAyNjEwNTc2MX0.DGQXFFdlCJxbJxRFpy3QULnWiaYMayPp5Cjy65GmDI4"
+  const supabase = createClient("https://hprlznezhxxwgjbtzoby.supabase.co", supabaseAnonKey);
 
-  const { openAuthRequest, signOut, isSignedIn } = useAuth();
-  const { openSignMessage } = useOpenSignMessage();
-  const { stxAddress } = useAccount();
+  const contractAddress = '0xD56e6F296352B03C3c3386543185E9B8c2e5Fd0b';
+  const contractABI = [
+  'event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)',
+  'event Trade(address indexed trader, address indexed subject, bool isBuy, uint256 shareAmount, uint256 ethAmount, uint256 protocolEthAmount, uint256 subjectEthAmount, uint256 supply)',
+  'function buyShares(address sharesSubject, uint256 amount) payable',
+  'function getBuyPrice(address sharesSubject, uint256 amount) external view returns (uint256)',
+  'function getBuyPriceAfterFee(address sharesSubject, uint256 amount) external view returns (uint256)',
+  'function getPrice(uint256 supply, uint256 amount) external pure returns (uint256)',
+  'function getSellPrice(address sharesSubject, uint256 amount) external view returns (uint256)',
+  'function getSellPriceAfterFee(address sharesSubject, uint256 amount) external view returns (uint256)',
+  'function owner() external view returns (address)',
+  'function protocolFeeDestination() external view returns (address)',
+  'function protocolFeePercent() external view returns (uint256)',
+  'function renounceOwnership() external',
+  'function sellShares(address sharesSubject, uint256 amount) payable',
+  'function setFeeDestination(address _feeDestination) external',
+  'function setProtocolFeePercent(uint256 _feePercent) external',
+  'function setSubjectFeePercent(uint256 _feePercent) external',
+  'function sharesBalance(address, address) external view returns (uint256)',
+  'function sharesSupply(address) external view returns (uint256)',
+  'function subjectFeePercent() external view returns (uint256)',
+  'function transferOwnership(address newOwner) external'
+];  
+  const { address, isConnected } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
+  const { disconnect } = useDisconnect()
 
-  const senderAddress = stxAddress!;
-  const contractAddress = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM';
-  const contractName = 'keys';
-  const functionName = 'is-keyholder';
+useEffect(() => {
+      fetchBalance()
+    }, []);
 
-  async function checkIsKeyHolder(subject: string, holder: string) {
-    console.log('Checking if user is a keyholder', subject, holder);
-    const functionArgs = [
-      standardPrincipalCV(subject),
-      standardPrincipalCV(holder)
-    ];
-    const result = await callReadOnlyFunction({
-      network,
-      contractAddress,
-      contractName,
-      functionName,
-      functionArgs,
-      senderAddress
-    });
+  
 
-    console.log('Result:', cvToValue(result));
 
-    return cvToValue(result);
-  }
+// 1. Get projectId
+const projectId = 'd6873b1f678ae8f16024db137ef8fe26'
 
-  async function handleInitialLogin() {
-    if (isSignedIn) {
-      await openSignMessage({
-        message,
-        onFinish: async (walletResponse) => {
-          const address = getAddressFromPublicKey(
-            walletResponse.publicKey,
-            network.version
-          );
-          const hasBoughtFirstKey = await checkIsKeyHolder(address, address);
-          if (hasBoughtFirstKey) {
-            console.log('The user is a keyholder');
-            navigate(`/profile/${stxAddress}`);
-            // The user is a keyholder, so they are authorized to access the chatroom
-          } else {
-            console.log('The user is not a keyholder');
-            navigate('/buy-first-key');
-            // The user is not a keyholder, so they are not authorized to access the chatroom
-          }
-        }
-      });
-      // await openSignatureRequestPopup({
-      //   message,
-      //   network,
-      //   onFinish: async ({ publicKey, signature }) => {
-      //     const verified = verifyMessageSignatureRsv({
-      //       message,
-      //       publicKey,
-      //       signature
-      //     });
-      //     if (verified) {
-      //       // The signature is verified, so now we can check if the user is a keyholder
-
-      //       const address = getAddressFromPublicKey(publicKey, network.version);
-      //       const isKeyHolder = await checkIsKeyHolder(address);
-      //       if (isKeyHolder) {
-      //         console.log('The user is a keyholder');
-      //         navigate('/home');
-      //         // The user is a keyholder, so they are authorized to access the chatroom
-      //       } else {
-      //         console.log('The user is not a keyholder');
-      //         navigate('/buy-first-key');
-      //         // The user is not a keyholder, so they are not authorized to access the chatroom
-      //       }
-      //     }
-      //   }
-      // });
-    }
-  }
-
-  const fetchBalance = async () => {
-    if (isSignedIn) {
-      try {
-        const fetchedSTXBalance = await fetchSTXBalance(stxAddress!);
-        setBalance(fetchedSTXBalance.balance / 1000000);
-        console.log('Fetched balance:', fetchedSTXBalance);
-      } catch (error) {
-        console.error('Failed to fetch balance:', error);
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    fetchBalance();
-  }, []); // The empty array causes this effect to only run on mount
-
-  const connectWallet = async () => {
-    await openAuthRequest().then(async (authResponse: any) => {
-      console.log('Auth response:', authResponse);
-      await handleInitialLogin();
-    });
-  };
-
-  const disconnectWallet = async () => {
-    await signOut();
-  };
-
-  return {
-    connectWallet,
-    disconnectWallet,
-    balance,
-    network,
-    contractAddress,
-    contractName,
-    stxAddress,
-    isSignedIn,
-    supabase,
-    checkIsKeyHolder
-  };
+// 2. Set chains
+const mainnet = {
+  chainId: 1,
+  name: 'anvil',
+  currency: 'ETH',
+  explorerUrl: 'https://etherscan.io',
+  rpcUrl: 'https://cloudflare-eth.com'
 }
+
+// 3. Create a metadata object
+const metadata = {
+  name: 'My Website',
+  description: 'My Website description',
+  url: 'https://mywebsite.com', // origin must match your domain & subdomain
+  icons: ['https://avatars.mywebsite.com/']
+}
+
+// 4. Create Ethers config
+const ethersConfig = defaultConfig({
+  /*Required*/
+  metadata,
+
+  /*Optional*/
+  enableEIP6963: true, // true by default
+  enableInjected: true, // true by default
+  enableCoinbase: true, // true by default
+})
+
+
+  createWeb3Modal({
+  ethersConfig,
+  chains: [mainnet],
+  projectId,
+  enableAnalytics: true
+})
+  
+function connect() {
+  const { open } = useWeb3Modal()
+  return (
+    open()
+  )
+}
+
+async function getSigner() {
+  if (!isConnected) console.log("user disconnected")
+  const ethersProvider = new ethers.BrowserProvider(walletProvider)
+  const signer = await ethersProvider.getSigner()
+  return signer
+}
+
+
+const fetchBalance = async () =>  {
+  try {
+    const balance = await window.ethereum.request({method: "eth_getBalance", params: [address,"latest"]})
+    setBalance(balance);
+    console.log('Fetched balance:', balance.toString());
+  } catch (error) {
+    console.error('Failed to fetch balance:', error);
+    
+  }
+}
+
+async function checkIsKeyHolder(subject: any, holder: any) {
+
+  try {
+    const friend = new ethers.Contract(contractAddress, contractABI, await getSigner())
+    const result = await friend.sharesBalance(subject, holder)
+    if (result > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  catch (error){
+      console.log(error)
+  }
+}
+
+  // Additional functions such as checkIsKeyHolder can be implemented similarly,
+  // utilizing the `provider` state for ethers operations.
+
+  return { checkIsKeyHolder, connect, getSigner, balance, address, contractAddress, contractABI, supabase, fetchBalance, isConnected, disconnect};
+};
 
 export default useConnect;

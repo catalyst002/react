@@ -58,7 +58,7 @@ const ChatRoomUI = () => {
     }
   };
   return (
-    <body className="relative bg-blue-50 overflow-hidden h-screen w-screen">
+    <body className="relative bg-yellow-50 overflow-hidden h-screen w-screen">
       <ChatLeftMenu />
 
       <main className="ml-40  max-h-screen overflow-auto w-screen">
@@ -145,7 +145,7 @@ const ChatRoomUI = () => {
               <div
                 id="messages"
                 ref={div}
-                className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+                className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-yellow scrollbar-thumb-rounded scrollbar-track-yellow-lighter scrollbar-w-2 scrolling-touch"
               >
                 {messages.map((message: any, i: any) => (
                   <div key={i}>
@@ -260,7 +260,7 @@ const ChatRoomUI = () => {
                     </button>
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
+                      className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-yellow-500 hover:bg-yellow-400 focus:outline-none"
                     >
                       <span className="font-bold">Send</span>
                       <svg

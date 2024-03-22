@@ -1,15 +1,15 @@
 import useConnect from '@/lib/hooks/useConnect';
 import { truncateAddress } from '@/lib/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConnectWallet from './connectWallet';
-import { SVGComponent } from './stacksSvg';
+import logo from './svglogo.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 const ChatLeftMenu = () => {
   const navigate = useNavigate();
-  const { supabase, stxAddress, checkIsKeyHolder } = useConnect();
+  const { supabase, checkIsKeyHolder, address} = useConnect();
 
   const [chatRooms, setChatRooms] = React.useState([]);
 
@@ -21,7 +21,7 @@ const ChatLeftMenu = () => {
       const chatRoomsWithAccess = await Promise.all(
         data!.map(async (chatRoom) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, stxAddress!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
         }))
       );
 
@@ -33,12 +33,12 @@ const ChatLeftMenu = () => {
   useEffect(() => {
     getAllChatRooms();
   }, []);
-
+  
   const { slug } = useParams();
   const getNavLinkClass = ({ isActive }: any) => {
     return isActive
-      ? 'flex items-center gap-5 bg-blue-500 rounded-xl font-bold text-md text-white py-3 px-4'
-      : 'flex items-center gap-5 bg-white hover:bg-blue-50 rounded-xl font-bold text-md text-gray-900 py-3 px-4';
+      ? 'flex items-center gap-5 bg-yellow-500 rounded-xl font-bold text-md text-white py-3 px-4'
+      : 'flex items-center gap-5 bg-white hover:bg-yellow-50 rounded-xl font-bold text-md text-gray-900 py-3 px-4';
   };
   return (
     <aside className="fixed inset-y-0 left-0 bg-white shadow-md w-80 h-screen">
@@ -64,9 +64,9 @@ const ChatLeftMenu = () => {
               </a>
 
               <div className="text-center flex flex-row items-center gap-2">
-                <SVGComponent />
+                <img src={logo} alt="" width={50} height={50}/>
                 <h1 className="text-xl font-normal leading-none">
-                  <span className="text-blue-500">sFriend</span>.tech
+                  <span className="text-yellow-500">Weave</span>.tech
                 </h1>
               </div>
 
@@ -98,16 +98,16 @@ const ChatLeftMenu = () => {
                       <div
                         onClick={() => {
                           navigate(
-                            `/chatRoom?name=${truncateAddress(
-                              stxAddress!
-                            )}&room=${chatRoom.roomId}`
+                            `/chatRoom?name=${
+                              address!
+                            }&room=${chatRoom.roomId}`
                           );
                           window.location.reload();
                         }}
                         className="flex items-center justify-between border-b pb-5 mb-10"
                       >
                         <div className="flex items-stretch font-bold">
-                          {stxAddress === chatRoom.roomId
+                          {address === chatRoom.roomId
                             ? 'My chat room'
                             : `${truncateAddress(chatRoom.roomId)}'s chat room`}
                         </div>

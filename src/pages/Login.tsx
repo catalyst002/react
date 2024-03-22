@@ -1,17 +1,35 @@
-import { SVGComponent } from '@/components/stacksSvg';
+import logo from '@/components/svglogo.svg';
 import useConnect from '@/lib/hooks/useConnect';
-import React from 'react';
+import { ethers } from 'ethers';
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const LoginPage: React.FC = () => {
-  const { connectWallet } = useConnect();
+
+
+
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const { connect, isConnected, checkIsKeyHolder, address} = useConnect();
+  useEffect(() => {
+    
+    const checkConnection = async () => {
+      if (isConnected && !(await checkIsKeyHolder(address, address))) {
+        navigate(`/buy-first-key`);
+      } else if(isConnected) {
+        navigate(`/profile/${address}`)
+      }
+    };
+    checkConnection();
+    }, [isConnected]);
+ 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white w-screen">
       <div className="text-center">
         <div className="mb-4">
           <div className="px-4 py-6 text-center flex flex-row items-center justify-center gap-2">
-            <SVGComponent />
+            <img src={logo} alt="" width={70}  height={70}/>
             <h1 className="text-3xl font-normal leading-none">
-              <span className="text-blue-500 text-5xl">sFriend</span>
+              <span className="text-yellow-500 text-5xl">Weave</span>
               <span className=" text-5xl">.tech</span>
             </h1>
           </div>
@@ -19,8 +37,8 @@ const LoginPage: React.FC = () => {
 
         <p className="text-gray-600 mb-28">The marketplace for your friends</p>
         <button
-          onClick={connectWallet}
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full mb-4 hover:bg-blue-600"
+          onClick={connect}
+          className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-full mb-4 hover:bg-yellow-600"
         >
           Connect Wallet
         </button>

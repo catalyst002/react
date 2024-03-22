@@ -1,11 +1,11 @@
 import LeftMenu from '@/components/leftMenu';
 import useConnect from '@/lib/hooks/useConnect';
 import { truncateAddress } from '@/lib/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Chats = () => {
-  const { supabase, stxAddress, checkIsKeyHolder } = useConnect();
+  const { supabase, address, checkIsKeyHolder } = useConnect();
   const navigate = useNavigate();
   const [chatRooms, setChatRooms] = React.useState([]);
 
@@ -17,7 +17,7 @@ const Chats = () => {
       const chatRoomsWithAccess = await Promise.all(
         data!.map(async (chatRoom) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, stxAddress!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
         }))
       );
 
@@ -29,8 +29,9 @@ const Chats = () => {
   useEffect(() => {
     getAllChatRooms();
   }, []);
+  
   return (
-    <body className="relative bg-blue-50 overflow-hidden h-screen w-screen">
+    <body className="relative bg-yellow-50 overflow-hidden h-screen w-screen">
       <LeftMenu />
 
       <main className="ml-60 pt-16 h-screen overflow-auto">
@@ -50,15 +51,13 @@ const Chats = () => {
                           <div
                             onClick={() =>
                               navigate(
-                                `/chatRoom?name=${truncateAddress(
-                                  stxAddress!
-                                )}&room=${chatRoom.roomId}`
+                                `/chatRoom?name=${address!}&room=${chatRoom.roomId}`
                               )
                             }
                             className="flex items-center justify-between border-b pb-5 mb-10"
                           >
                             <div className="text-lg font-bold">
-                              {stxAddress === chatRoom.roomId
+                              {address === chatRoom.roomId
                                 ? 'My chat room'
                                 : `${truncateAddress(
                                     chatRoom.roomId

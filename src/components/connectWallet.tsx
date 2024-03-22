@@ -3,11 +3,11 @@ import { ReactElement } from 'react';
 import { Button } from '@/components/ui/button';
 import useConnect from '@/lib/hooks/useConnect';
 import { ArrowRight } from 'lucide-react';
-import { SVGComponent } from './stacksSvg';
+import logo from './svglogo.svg';
 import { useNavigate } from 'react-router-dom';
 
 function ConnectWallet(): ReactElement {
-  const { connectWallet, disconnectWallet, network, isSignedIn, balance } =
+  const { connect, balance, disconnect, isConnected } =
     useConnect();
   const navigate = useNavigate();
 
@@ -62,20 +62,19 @@ function ConnectWallet(): ReactElement {
 
   return (
     <div className="mt-4 flex flex-col items-center space-y-2">
-      {isSignedIn ? (
+      {isConnected ? (
         <>
           <div>
             {balance && (
               <span className="flex flex-row items-center gap-2 font-bold">
-                Balance: {balance} <SVGComponent />
+                Balance: {parseInt(balance.toString(), 16) / 1e18} BTC
               </span>
             )}
           </div>
           <div className="flex flex justify-center w-full">
             <Button
               onClick={() => {
-                disconnectWallet;
-                navigate('/login');
+                disconnect()
               }}
               variant="link"
               className="h-auto p-0 text-base"
@@ -87,7 +86,7 @@ function ConnectWallet(): ReactElement {
         </>
       ) : (
         <Button
-          onClick={connectWallet}
+          onClick={connect}
           variant="link"
           className="h-auto p-0 text-base"
         >

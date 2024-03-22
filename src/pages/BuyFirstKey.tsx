@@ -1,46 +1,47 @@
 import useConnect from '@/lib/hooks/useConnect';
-import { useOpenContractCall } from '@micro-stacks/react';
-import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const BuyFirstKey: React.FC = () => {
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ethers } from "ethers";
+
+
+
+const BuyFirstKey = () => {
   const navigate = useNavigate();
+  
 
   // Create a single supabase client for interacting with your database
 
-  const { contractAddress, contractName, stxAddress, isSignedIn, supabase } =
+  const { contractAddress, supabase, getSigner, address, contractABI} =
     useConnect();
-  const { openContractCall, isRequestPending } = useOpenContractCall();
 
   const [response, setResponse] = useState(null);
 
   const saveSubjectToDB = async () => {
     const { error } = await supabase
       .from('subjects')
-      .insert({ roomId: stxAddress });
+      .insert({ roomId: address });
   };
-  const handleOpenContractCall = async () => {
-    if (!isSignedIn) return;
-    const functionArgs = [standardPrincipalCV(stxAddress!), uintCV(1)];
-    await openContractCall({
-      contractAddress: contractAddress,
-      contractName: contractName,
-      functionName: 'buy-keys',
-      functionArgs,
-      postConditions: [],
+ 
 
-      onFinish: async (data: any) => {
-        console.log('finished contract call!', data);
-        setResponse(data);
+  const buyKey = async () => {
+    const friend = new ethers.Contract(contractAddress, contractABI, await getSigner() ? await getSigner() : undefined)
+    const result = await friend.buyShares(address, 1, {
+        value: 0
+})
 
-        navigate(`/profile/${stxAddress}`);
-      },
-      onCancel: () => {
-        console.log('popup closed!');
-      }
-    });
+    console.log('Result:', result);
+    result.wait().then(async (receipt: any) => {
+          // console.log(receipt);
+          const addr = address
+          if (receipt && receipt.status == 1) {
+             navigate(`/profile/${addr}`);
+          } else {
+            console.log('buying failed!');
+          }
+       });
   };
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white w-screen">
       <div className="text-center">
@@ -52,7 +53,7 @@ const BuyFirstKey: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6">Buy your first key</h1>
 
         <p className="text-gray-600 text-lg mb-8 w-[700px]">
-          Everyone of sFriend.tech has a chat unlocked by their keys.These keys
+          Everyone of Weave.tech has a chat unlocked by their keys.These keys
           can be bought and sold on a person's profile and their price goes up
           and down based on how many are circulating.
         </p>
@@ -68,14 +69,21 @@ const BuyFirstKey: React.FC = () => {
         </p>
         <button
           onClick={async () => {
-            if (isSignedIn) {
-              saveSubjectToDB();
-              handleOpenContractCall();
-            }
+
+              const { count, error } = await supabase
+                .from('subjects')
+                .select('', { count: 'exact', head: true })
+              console.log(count)
+              if (count < 1 ) {
+                saveSubjectToDB();
+                
+              }
+              
+              buyKey();
           }}
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full mb-4 hover:bg-blue-600"
+          className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-full mb-4 hover:bg-yellow-600"
         >
-          {isRequestPending ? 'request pending...' : 'Buy Key for $0'}
+          {'Buy Key for $0'}
         </button>
       </div>
     </div>
