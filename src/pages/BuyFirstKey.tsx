@@ -74,6 +74,7 @@ const BuyFirstKey = () => {
                 .from('subjects')
                 .select('', { count: 'exact', head: true })
               console.log(count)
+              // @ts-ignore
               if (count < 1 ) {
                 saveSubjectToDB();
                 
