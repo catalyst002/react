@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { createWeb3Modal, defaultConfig, useDisconnect, useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider} from '@web3modal/ethers/react';
 import { Web3Modal } from '@web3modal/ethers/dist/types/src/client';
 
+
+
 const useConnect = () => {
   const navigate = useNavigate();
   const [balance, setBalance] = useState("0");
@@ -45,6 +47,12 @@ useEffect(() => {
     }, []);
 
   
+  interface Window {
+      ethereum: {
+        request: (request: { method: string, params?: Array<any> }) => Promise<any>;
+      };
+    }
+    
 
 
 // 1. Get projectId
@@ -94,7 +102,7 @@ function connect() {
 }
 
 async function getSigner() {
-  if (!isConnected) console.log("user disconnected")
+  if (!walletProvider) return
   const ethersProvider = new ethers.BrowserProvider(walletProvider)
   const signer = await ethersProvider.getSigner()
   return signer
@@ -103,14 +111,17 @@ async function getSigner() {
 
 const fetchBalance = async () =>  {
   try {
-    const balance = await window.ethereum.request({method: "eth_getBalance", params: [address,"latest"]})
+    if (!window.ethereum) return;
+    if (typeof window.ethereum.request === "undefined") return; // Check if request method is undefined
+    // @ts-ignore
+    const balance = await window.ethereum.request({method: "eth_getBalance", params: [address, "latest"]});
     setBalance(balance);
     console.log('Fetched balance:', balance.toString());
   } catch (error) {
     console.error('Failed to fetch balance:', error);
-    
   }
 }
+
 
 async function checkIsKeyHolder(subject: any, holder: any) {
 
