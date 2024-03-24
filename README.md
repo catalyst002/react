@@ -26,7 +26,9 @@ VITE_SUPABASE_PROJECT_URL=
 6. Open a new terminal session
 7. Install the dependencies for the chat server: `cd server && yarn install`
 8. Start the chat server: `yarn start`
-9. Open the application in your browser: `http://localhost:5173/`
+9. Run deployer.mjs `node deployer.mjs` to deploy contract
+10. Open the application in your browser: `http://localhost:5173/`
+    
 
 
 ## Setup
