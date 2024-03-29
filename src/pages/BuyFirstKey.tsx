@@ -27,6 +27,10 @@ const BuyFirstKey = () => {
 
   
   const buyKey = async () => {
+    // @ts-ignore
+    const accounts = await ethereum.request({
+      method: 'eth_requestAccounts',
+    });
     //@ts-ignore
     const addr = await window.ethereum.request({
       "method": "eth_accounts",

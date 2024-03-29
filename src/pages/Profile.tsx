@@ -135,17 +135,16 @@ const Profile = () => {
     const accounts = await ethereum.request({
       method: 'eth_requestAccounts',
     });
-    const signer = await getSigner()
 
     const price = await fetchBuySharePriceByAmount(amount);
-    const friend = new ethers.Contract(contractAddress, contractABI, signer ? signer : undefined)
-    const result = await friend.buyShares(slug, amount, {
-        value: price
-})
-
+    // @ts-ignore
+    const addr = await window.ethereum.request({
+      "method": "eth_accounts",
+      "params": []
+    });
+    // @ts-ignore
+    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("buyShares", [slug, price])}, "latest"]});
     console.log('Result:', result);
-    
-    
     }
    
   
@@ -155,12 +154,14 @@ const Profile = () => {
     const accounts = await ethereum.request({
       method: 'eth_requestAccounts',
     });
-    const signer = await getSigner()
-    const friend = new ethers.Contract(contractAddress, contractABI, signer ? signer : undefined)
-    const result = await friend.sellShares(slug, amount)
-
+    // @ts-ignore
+    const addr = await window.ethereum.request({
+      "method": "eth_accounts",
+      "params": []
+    });
+    // @ts-ignore
+    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("sellShares", [slug, amount])}, "latest"]});
     console.log('Result:', result);
-
   };
 
   const voteFor = async (proposalId: any) => {
