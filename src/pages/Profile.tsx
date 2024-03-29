@@ -137,6 +137,7 @@ const Profile = () => {
     });
     console.log(`${amount} amount to buy`)
     const price = await fetchBuySharePriceByAmount(amount);
+    console.log(`${price} price of buy key is `)
     // @ts-ignore
     const addr = await window.ethereum.request({
       "method": "eth_accounts",
