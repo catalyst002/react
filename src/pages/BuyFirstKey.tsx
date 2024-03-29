@@ -18,10 +18,10 @@ const BuyFirstKey = () => {
 
   const [response, setResponse] = useState(null);
 
-  const saveSubjectToDB = async () => {
+  const saveSubjectToDB = async (addr: any) => {
     const { error } = await supabase
       .from('subjects')
-      .insert({ roomId: address });
+      .insert({ roomId: addr });
   };
  
 
@@ -31,22 +31,22 @@ const BuyFirstKey = () => {
     const accounts = await ethereum.request({
       method: 'eth_requestAccounts',
     });
-    //@ts-ignore
-    const addr = await window.ethereum.request({
+     //@ts-ignore
+     const addr = await window.ethereum.request({
       "method": "eth_accounts",
       "params": []
     });
     const friend = new ethers.Contract(contractAddress, contractABI, await getSigner() ? await getSigner() : undefined)
     const result = await friend.buyShares(addr[0], 1, {
         value: 0, gasLimit: 250000
-})
+        })
 
     console.log('Result:', result);
     result.wait().then(async (receipt: any) => {
           // console.log(receipt);
-          const addr = address
           if (receipt && receipt.status == 1) {
-             navigate(`/profile/${addr}`);
+            saveSubjectToDB(addr[0]);
+            navigate(`/profile/${addr[0]}`);
           } else {
             console.log('buying failed!');
           }
@@ -81,7 +81,7 @@ const BuyFirstKey = () => {
         <button
           onClick={async () => {
 
-              saveSubjectToDB();
+              
               buyKey();
           }}
           className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-full mb-4 hover:bg-yellow-600"
