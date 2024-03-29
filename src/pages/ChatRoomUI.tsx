@@ -14,7 +14,7 @@ interface IMessage {
 
 const ChatRoomUI = () => {
   const div = useRef<HTMLDivElement>(null);
-  const ENDPOINT = 'http://localhost:5999';
+  const ENDPOINT = 'https://react-production-4875.up.railway.app:5560/';
   const [name, setName] = useState<string>('');
   const [room, setRoom] = useState<string>('');
   const [message, setMessage] = useState<string>('');
