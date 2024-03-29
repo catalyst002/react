@@ -13,6 +13,7 @@ const LoginPage = () => {
   useEffect(() => {
     
     const checkConnection = async () => {
+      //@ts-ignore
       const addr = await window.ethereum.request({
         "method": "eth_accounts",
         "params": []

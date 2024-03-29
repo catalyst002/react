@@ -121,11 +121,13 @@ async function getProvider() {
 
 const fetchBalance = async () =>  {
   try {
+    //@ts-ignore
     const accounts = await ethereum.request({
       method: 'eth_requestAccounts',
     });
     if (!window.ethereum) return;
     if (typeof window.ethereum.request === "undefined") return; // Check if request method is undefined
+    //@ts-ignore
     const addr = await window.ethereum.request({
       "method": "eth_accounts",
       "params": []
@@ -141,12 +143,14 @@ const fetchBalance = async () =>  {
 
 
 async function checkIsKeyHolder(subject: any) {
+  //@ts-ignore
   const accounts = await ethereum.request({
     method: 'eth_requestAccounts',
   });
   if (!window.ethereum) return;
   if (typeof window.ethereum.request === "undefined") return; // Check if request method is undefined
   try {
+    //@ts-ignore
     const addr = await window.ethereum.request({
       "method": "eth_accounts",
       "params": []

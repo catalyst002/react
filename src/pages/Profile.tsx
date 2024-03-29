@@ -9,6 +9,7 @@ import { FunctionFragment, Result, ethers } from "ethers";
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { isContext } from 'vm';
+//@ts-ignore
 BigInt.prototype.toJSON = function() {}
 
 const Profile = () => {
@@ -83,9 +84,12 @@ const Profile = () => {
     const resultArray = Array.from(resultdecoded[0])
     const editedResultArray: any = []
     resultArray.forEach(array => {
+      //@ts-ignore
       editedResultArray.push(Array.from(array))
     })
+    //@ts-ignore
     const objectsArray = []
+    //@ts-ignore
     editedResultArray.forEach(arrayed => {
       objectsArray.push({
         id: Number(arrayed[0]), // Convert BigInt to Number
@@ -96,7 +100,9 @@ const Profile = () => {
         address: arrayed[5]
       })
     })
+    //@ts-ignore
     console.log(objectsArray)
+    //@ts-ignore
     setProposals(objectsArray)
   }
 
@@ -387,13 +393,21 @@ const Profile = () => {
                                 border: '1px solid', // Optional, to visually define the area
                                 borderRadius: '5px', // Optional, for rounded corners
                               }}>
-                      {proposals.sort((a, b) => b.id - a.id).map((proposal) => (                        
+                                   {/* @ts-ignore */}
+                      {proposals.sort((a, b) => b.id - a.id).map((proposal) => (   
+                        //@ts-ignore                     
                         <div key={proposal.id} className="proposal mb-4">
+                          {/* @ts-ignore */}
                         <h3 className="text-xl">{proposal.title}</h3>
+                        {/* @ts-ignore */}
                         <p>{proposal.description}</p>
+                        {/* @ts-ignore */}
                         <div>Votes For: {proposal.votesFor}</div>
+                        {/* @ts-ignore */}
                         <div>Votes Against: {proposal.votesAgainst}</div>
+                        {/* @ts-ignore */}
                         <button className="inline-flex items-center justify-center h-9 px-[20px] rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition" onClick={async () => await voteFor(proposal.id)}>For</button>
+                        {/* @ts-ignore */}
                         <button className="inline-flex items-center justify-center h-9 px-[20px] rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition" onClick={async () => await voteAgainst(proposal.id)}>Against</button>
                       </div>
                       ))}
