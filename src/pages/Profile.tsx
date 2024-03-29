@@ -122,7 +122,7 @@ const Profile = () => {
     // @ts-ignore
     const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], data: interfaceABI.encodeFunctionData("getBuyPriceAfterFee", [slug, amount])}, "latest"]});
 
-    console.log('Result:', result);
+    console.log('Price Result:', result);
 
     return result;
   };
@@ -135,7 +135,7 @@ const Profile = () => {
     const accounts = await ethereum.request({
       method: 'eth_requestAccounts',
     });
-
+    console.log(`${amount} amount to buy`)
     const price = await fetchBuySharePriceByAmount(amount);
     // @ts-ignore
     const addr = await window.ethereum.request({
