@@ -144,8 +144,7 @@ const Profile = () => {
       "params": []
     });
     // @ts-ignore
-    const result = await window.ethereum.request({method: "eth_sendTransaction", params: [{to: contractAddress, from: addr[0], data: interfaceABI.encodeFunctionData("buyShares", [slug, amount]), value: toNumber(price)}, "latest"]});
-    console.log('Result price:', toNumber(price));
+    const result = await window.ethereum.request({method: "eth_sendTransaction", params: [{to: contractAddress, from: addr[0], data: interfaceABI.encodeFunctionData("buyShares", [slug, amount]), value: price}, "latest"]});
     console.log('Result:', JSON.stringify(result))
 
     }
