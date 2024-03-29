@@ -143,7 +143,7 @@ const Profile = () => {
       "params": []
     });
     // @ts-ignore
-    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("buyShares", [slug, price])}, "latest"]});
+    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("buyShares", [slug, amount])}, "latest"]});
     console.log('Result:', result);
     }
    
@@ -160,7 +160,7 @@ const Profile = () => {
       "params": []
     });
     // @ts-ignore
-    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("sellShares", [slug, amount])}, "latest"]});
+    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], data: interfaceABI.encodeFunctionData("sellShares", [slug, amount])}, "latest"]});
     console.log('Result:', result);
   };
 
