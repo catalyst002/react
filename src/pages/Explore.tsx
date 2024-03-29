@@ -137,7 +137,7 @@ const Explore = () => {
                           return (
                             <div
                               onClick={() =>
-                                navigate(`/chatRoom?name=${chatRoom.roomId}`)
+                                navigate(`/profile/${chatRoom.roomId}`)
                               }
                               className="flex items-center justify-between border-b pb-5 mb-10"
                             >
