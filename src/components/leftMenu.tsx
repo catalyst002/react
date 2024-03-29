@@ -23,7 +23,7 @@ const LeftMenu = () => {
           <div className="px-4 py-6 text-center border-b flex flex-row items-center justify-center gap-2">
             <img src={logo} alt="" width={30} height={30} />
             <h1 className="text-xl font-normal leading-none">
-              <span className="text-yellow-500">Weave</span>.tech
+              <span className="text-yellow-500">Cobweb</span>.social
             </h1>
           </div>
           <div className="p-4">

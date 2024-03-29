@@ -24,10 +24,15 @@ const BuyFirstKey = () => {
   };
  
 
+  
   const buyKey = async () => {
+    const addr = await window.ethereum.request({
+      "method": "eth_accounts",
+      "params": []
+    });
     const friend = new ethers.Contract(contractAddress, contractABI, await getSigner() ? await getSigner() : undefined)
-    const result = await friend.buyShares(address, 1, {
-        value: 0
+    const result = await friend.buyShares(addr[0], 1, {
+        value: 0, gasLimit: 250000
 })
 
     console.log('Result:', result);
@@ -53,7 +58,7 @@ const BuyFirstKey = () => {
         <h1 className="text-3xl font-bold mb-6">Buy your first key</h1>
 
         <p className="text-gray-600 text-lg mb-8 w-[700px]">
-          Everyone of Weave.tech has a chat unlocked by their keys.These keys
+          Everyone in Cobweb has a chat unlocked by their keys.These keys
           can be bought and sold on a person's profile and their price goes up
           and down based on how many are circulating.
         </p>

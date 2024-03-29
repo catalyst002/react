@@ -13,7 +13,11 @@ const LoginPage = () => {
   useEffect(() => {
     
     const checkConnection = async () => {
-      if (isConnected && !(await checkIsKeyHolder(address, address))) {
+      const addr = await window.ethereum.request({
+        "method": "eth_accounts",
+        "params": []
+      });
+      if (isConnected && !(await checkIsKeyHolder(addr[0]))) {
         navigate(`/buy-first-key`);
       } else if(isConnected) {
         navigate(`/profile/${address}`)
@@ -29,8 +33,8 @@ const LoginPage = () => {
           <div className="px-4 py-6 text-center flex flex-row items-center justify-center gap-2">
             <img src={logo} alt="" width={70}  height={70}/>
             <h1 className="text-3xl font-normal leading-none">
-              <span className="text-yellow-500 text-5xl">Weave</span>
-              <span className=" text-5xl">.tech</span>
+              <span className="text-yellow-500 text-5xl">Cobweb</span>
+              <span className=" text-5xl">.social</span>
             </h1>
           </div>
         </div>

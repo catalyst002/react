@@ -17,9 +17,10 @@ const Explore = () => {
       const result = await Promise.all(
         data!.map(async (chatRoom: any) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId)
         }))
       );
+      console.log(`getAllfriends result ${result}`)
 
       setFriends(result as any);
     }
@@ -97,7 +98,7 @@ const Explore = () => {
                               {chatRoom.hasAccess && (
                                 <div
                                   onClick={() =>
-                                    navigate(`/profile/${chatRoom.roomId}`)
+                                    navigate(`/chatRoom?name=${chatRoom.roomId}`)
                                   }
                                   className="flex items-center justify-between border-b pb-5 mb-10"
                                 >
@@ -136,7 +137,7 @@ const Explore = () => {
                           return (
                             <div
                               onClick={() =>
-                                navigate(`/profile/${chatRoom.roomId}`)
+                                navigate(`/chatRoom?name=${chatRoom.roomId}`)
                               }
                               className="flex items-center justify-between border-b pb-5 mb-10"
                             >

@@ -17,7 +17,7 @@ const Chats = () => {
       const chatRoomsWithAccess = await Promise.all(
         data!.map(async (chatRoom) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId)
         }))
       );
 

@@ -21,7 +21,7 @@ const ChatLeftMenu = () => {
       const chatRoomsWithAccess = await Promise.all(
         data!.map(async (chatRoom) => ({
           ...chatRoom,
-          hasAccess: await checkIsKeyHolder(chatRoom.roomId, address!)
+          hasAccess: await checkIsKeyHolder(chatRoom.roomId)
         }))
       );
 
@@ -66,7 +66,7 @@ const ChatLeftMenu = () => {
               <div className="text-center flex flex-row items-center gap-2">
                 <img src={logo} alt="" width={50} height={50}/>
                 <h1 className="text-xl font-normal leading-none">
-                  <span className="text-yellow-500">Weave</span>.tech
+                  <span className="text-yellow-500">Cobweb</span>.social
                 </h1>
               </div>
 

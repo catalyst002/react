@@ -1,6 +1,6 @@
-# Weave.tech
+# Cobweb.social
 
-This project is a clone of friend.tech powered by Spiderchain. 
+This project is a fork of friend.tech powered by Spiderchain. 
 
 # Video Demo
 
@@ -9,6 +9,9 @@ link: ********
 
 
 ## Getting Started
+To test app you can proceed by the link: ********
+
+Or build it local
 
 To get the application running, follow these steps:
 

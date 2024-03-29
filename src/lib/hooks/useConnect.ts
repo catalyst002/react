@@ -15,7 +15,7 @@ const useConnect = () => {
   const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwcmx6bmV6aHh4d2dqYnR6b2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1Mjk3NjEsImV4cCI6MjAyNjEwNTc2MX0.DGQXFFdlCJxbJxRFpy3QULnWiaYMayPp5Cjy65GmDI4"
   const supabase = createClient("https://hprlznezhxxwgjbtzoby.supabase.co", supabaseAnonKey);
 
-  const contractAddress = '0xD56e6F296352B03C3c3386543185E9B8c2e5Fd0b';
+  const contractAddress = '0x5bf5716366B54B54DAf6a3eEfE237061dfDCcb89';
   const contractABI = [
   'event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)',
   'event Trade(address indexed trader, address indexed subject, bool isBuy, uint256 shareAmount, uint256 ethAmount, uint256 protocolEthAmount, uint256 subjectEthAmount, uint256 supply)',
@@ -36,7 +36,11 @@ const useConnect = () => {
   'function sharesBalance(address, address) external view returns (uint256)',
   'function sharesSupply(address) external view returns (uint256)',
   'function subjectFeePercent() external view returns (uint256)',
-  'function transferOwnership(address newOwner) external'
+  'function transferOwnership(address newOwner) external',
+  'function isHolder(address subject, address suspect) external view returns (bool)',
+  'function getProposals() external view returns (tuple(uint, string, string, uint, uint, address)[])',
+  'function vote(uint, bool) external',
+  'function createProposal(string memory title, string memory description, address subject) public'
 ];  
   const { address, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
@@ -59,12 +63,12 @@ useEffect(() => {
 const projectId = 'd6873b1f678ae8f16024db137ef8fe26'
 
 // 2. Set chains
-const mainnet = {
-  chainId: 1,
-  name: 'anvil',
-  currency: 'ETH',
-  explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'https://cloudflare-eth.com'
+const botanix = {
+  chainId: 3636,
+  name: 'Botanix',
+  currency: 'BTC',
+  explorerUrl: 'https://blockscout.botanixlabs.dev/',
+  rpcUrl: 'https://node.botanixlabs.dev'
 }
 
 // 3. Create a metadata object
@@ -89,7 +93,7 @@ const ethersConfig = defaultConfig({
 
   createWeb3Modal({
   ethersConfig,
-  chains: [mainnet],
+  chains: [botanix],
   projectId,
   enableAnalytics: true
 })
@@ -101,20 +105,33 @@ function connect() {
   )
 }
 
+
 async function getSigner() {
   if (!walletProvider) return
   const ethersProvider = new ethers.BrowserProvider(walletProvider)
   const signer = await ethersProvider.getSigner()
   return signer
 }
+async function getProvider() {
+  if (!walletProvider) return
+  const ethersProvider = new ethers.BrowserProvider(walletProvider)
+  return ethersProvider
+}
 
 
 const fetchBalance = async () =>  {
   try {
+    const accounts = await ethereum.request({
+      method: 'eth_requestAccounts',
+    });
     if (!window.ethereum) return;
     if (typeof window.ethereum.request === "undefined") return; // Check if request method is undefined
+    const addr = await window.ethereum.request({
+      "method": "eth_accounts",
+      "params": []
+    });
     // @ts-ignore
-    const balance = await window.ethereum.request({method: "eth_getBalance", params: [address, "latest"]});
+    const balance = await window.ethereum.request({method: "eth_getBalance", params: [addr[0], "latest"]});
     setBalance(balance);
     console.log('Fetched balance:', balance.toString());
   } catch (error) {
@@ -123,11 +140,20 @@ const fetchBalance = async () =>  {
 }
 
 
-async function checkIsKeyHolder(subject: any, holder: any) {
-
+async function checkIsKeyHolder(subject: any) {
+  const accounts = await ethereum.request({
+    method: 'eth_requestAccounts',
+  });
+  if (!window.ethereum) return;
+  if (typeof window.ethereum.request === "undefined") return; // Check if request method is undefined
   try {
-    const friend = new ethers.Contract(contractAddress, contractABI, await getSigner())
-    const result = await friend.sharesBalance(subject, holder)
+    const addr = await window.ethereum.request({
+      "method": "eth_accounts",
+      "params": []
+    });
+    const friend = new ethers.Contract(contractAddress, contractABI, await getProvider())
+    const result = await friend.isHolder(subject, addr[0])
+    console.log(`$sucksesfuly holder ${result}`)
     if (result > 0) {
       return true;
     } else {
@@ -135,14 +161,14 @@ async function checkIsKeyHolder(subject: any, holder: any) {
     }
   }
   catch (error){
-      console.log(error)
+      console.log(`${JSON.stringify(error)} failed dodik`)
   }
 }
 
   // Additional functions such as checkIsKeyHolder can be implemented similarly,
   // utilizing the `provider` state for ethers operations.
 
-  return { checkIsKeyHolder, connect, getSigner, balance, address, contractAddress, contractABI, supabase, fetchBalance, isConnected, disconnect};
+  return { checkIsKeyHolder, connect, getProvider, getSigner, balance, address, contractAddress, contractABI, supabase, fetchBalance, isConnected, disconnect};
 };
 
 export default useConnect;
