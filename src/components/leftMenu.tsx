@@ -3,6 +3,11 @@ import { NavLink, useParams } from 'react-router-dom';
 import logo from './svglogo.svg';
 import ConnectWallet from './connectWallet';
 import useConnect from '@/lib/hooks/useConnect';
+import ChatsImage from '../../assets/chats.png'
+import SearchImage from '../../assets/search.png'
+import ProfileImage from '../../assets/profile.png'
+
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -36,13 +41,13 @@ const LeftMenu = () => {
               </li> */}
               <li>
                 <NavLink to={'/chats'} className={getNavLinkClass}>
-                  <img src="../../assets/chats.png" alt="" width={50} />
+                  <img src={ChatsImage} alt="" width={50} />
                   Chats
                 </NavLink>
               </li>
               <li>
                 <NavLink to={'/explore'} className={getNavLinkClass}>
-                  <img src="../../assets/search.png" alt="" width={50} />
+                  <img src={SearchImage} alt="" width={50} />
                   Explore
                 </NavLink>
               </li>
@@ -51,7 +56,7 @@ const LeftMenu = () => {
                   to={`/profile/${address}`}
                   className={getNavLinkClass}
                 >
-                  <img src="../../assets/profile.png" alt="" width={50} />
+                  <img src={ProfileImage} alt="" width={50} />
                   Profile
                 </NavLink>
               </li>

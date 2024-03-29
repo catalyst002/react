@@ -15,7 +15,7 @@ const useConnect = () => {
   const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwcmx6bmV6aHh4d2dqYnR6b2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1Mjk3NjEsImV4cCI6MjAyNjEwNTc2MX0.DGQXFFdlCJxbJxRFpy3QULnWiaYMayPp5Cjy65GmDI4"
   const supabase = createClient("https://hprlznezhxxwgjbtzoby.supabase.co", supabaseAnonKey);
 
-  const contractAddress = '0x2Ef556D79d8554aD3F4C536c7BF8ff9c2dd099cb';
+  const contractAddress = '0xFE259e3bf6fB1B5C0d3F7d269fA19a48410B1cf4';
   const contractABI = [
   'event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)',
   'event Trade(address indexed trader, address indexed subject, bool isBuy, uint256 shareAmount, uint256 ethAmount, uint256 protocolEthAmount, uint256 subjectEthAmount, uint256 supply)',

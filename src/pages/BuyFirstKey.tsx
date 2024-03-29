@@ -3,6 +3,7 @@ import useConnect from '@/lib/hooks/useConnect';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers";
+import KeyImage from '../../assets/key.png'
 
 
 
@@ -53,7 +54,7 @@ const BuyFirstKey = () => {
       <div className="text-center">
         <div className="mb-0">
           <div className="px-4 py-4 text-center flex flex-row items-center justify-center gap-2">
-            <img src="../../assets/key.png" alt="" width={200} />
+            <img src={KeyImage} alt="" width={200} />
           </div>
         </div>
         <h1 className="text-3xl font-bold mb-6">Buy your first key</h1>
