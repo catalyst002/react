@@ -15,7 +15,7 @@ const useConnect = () => {
   const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwcmx6bmV6aHh4d2dqYnR6b2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1Mjk3NjEsImV4cCI6MjAyNjEwNTc2MX0.DGQXFFdlCJxbJxRFpy3QULnWiaYMayPp5Cjy65GmDI4"
   const supabase = createClient("https://hprlznezhxxwgjbtzoby.supabase.co", supabaseAnonKey);
 
-  const contractAddress = '0x5bf5716366B54B54DAf6a3eEfE237061dfDCcb89';
+  const contractAddress = '0x2709468Df4CD6F2aBE1896B08A53c81d5C586c1e';
   const contractABI = [
   'event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)',
   'event Trade(address indexed trader, address indexed subject, bool isBuy, uint256 shareAmount, uint256 ethAmount, uint256 protocolEthAmount, uint256 subjectEthAmount, uint256 supply)',
@@ -36,11 +36,11 @@ const useConnect = () => {
   'function sharesBalance(address, address) external view returns (uint256)',
   'function sharesSupply(address) external view returns (uint256)',
   'function subjectFeePercent() external view returns (uint256)',
-  'function transferOwnership(address newOwner) external',
-  'function isHolder(address subject, address suspect) external view returns (bool)',
+  'function transferOwnership(address) external',
+  'function isHolder(address, address) external view returns (bool)',
   'function getProposals() external view returns (tuple(uint, string, string, uint, uint, address)[])',
   'function vote(uint, bool) external',
-  'function createProposal(string memory title, string memory description, address subject) public'
+  'function createProposal(string, string, address) public'
 ];  
   const { address, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
