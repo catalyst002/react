@@ -53,7 +53,7 @@ const BuyFirstKey = () => {
       <div className="text-center">
         <div className="mb-0">
           <div className="px-4 py-4 text-center flex flex-row items-center justify-center gap-2">
-            <img src="../../static/assets/key.png" alt="" width={200} />
+            <img src="../../assets/key.png" alt="" width={200} />
           </div>
         </div>
         <h1 className="text-3xl font-bold mb-6">Buy your first key</h1>
