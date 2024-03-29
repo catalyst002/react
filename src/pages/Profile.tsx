@@ -3,7 +3,7 @@ import useConnect from '@/lib/hooks/useConnect';
 
 import { truncateAddress } from '@/lib/utils';
 import { Description } from '@radix-ui/react-dialog';
-import { FunctionFragment, Result, ethers } from "ethers";
+import { FunctionFragment, Result, ethers, toNumber } from "ethers";
 
 
 import React, { useEffect, useState } from 'react';
@@ -144,8 +144,10 @@ const Profile = () => {
       "params": []
     });
     // @ts-ignore
-    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], value: price, data: interfaceABI.encodeFunctionData("buyShares", [slug, amount])}, "latest"]});
-    console.log('Result:', result);
+    const result = await window.ethereum.request({method: "eth_call", params: [{to: contractAddress, from: addr[0], data: interfaceABI.encodeFunctionData("buyShares", [slug, amount]), value: toNumber(price)}, "latest"]});
+    console.log('Result price:', toNumber(price));
+    console.log('Result:', JSON.stringify(result))
+
     }
    
   
