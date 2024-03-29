@@ -36,13 +36,13 @@ const LeftMenu = () => {
               </li> */}
               <li>
                 <NavLink to={'/chats'} className={getNavLinkClass}>
-                  <img src="../assets/chats.png" alt="" width={50} />
+                  <img src="../pages/assets/chats.png" alt="" width={50} />
                   Chats
                 </NavLink>
               </li>
               <li>
                 <NavLink to={'/explore'} className={getNavLinkClass}>
-                  <img src="../assets/search.png" alt="" width={50} />
+                  <img src="../pages/assets/search.png" alt="" width={50} />
                   Explore
                 </NavLink>
               </li>
@@ -51,7 +51,7 @@ const LeftMenu = () => {
                   to={`/profile/${address}`}
                   className={getNavLinkClass}
                 >
-                  <img src="../assets/profile.png" alt="" width={50} />
+                  <img src="../pages/assets/profile.png" alt="" width={50} />
                   Profile
                 </NavLink>
               </li>
