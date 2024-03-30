@@ -1,5 +1,12 @@
+import fs from "fs";
+
+const cts = {
+  cert: fs.readFileSync("../../etc/letsencrypt/cobwebbackendinfra.xyz/fullchain.pem"),
+  key: fs.readFileSync("../../etc/letsencrypt/cobwebbackendinfra.xyz/privkey.pem")
+}
+
 const app = require('express')();
-const server = require('http').createServer(app);
+const server = require('https').createServer(cts, app);
 const cors = require('cors');
 const socketio = require('socket.io');
 const {
