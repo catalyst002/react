@@ -1,8 +1,8 @@
-import fs from "fs";
+const fs = require("fs");
 
 const cts = {
-  cert: fs.readFileSync("/etc/letsencrypt/cobwebbackendinfra.xyz/fullchain.pem"),
-  key: fs.readFileSync("/etc/letsencrypt/cobwebbackendinfra.xyz/privkey.pem")
+  cert: fs.readFileSync("../../etc/letsencrypt/live/cobwebbackendinfra.xyz/fullchain.pem"),
+  key: fs.readFileSync("../../etc/letsencrypt/live/cobwebbackendinfra.xyz/privkey.pem")
 }
 
 const app = require('express')();
