@@ -10,7 +10,7 @@ const {
 const io = socketio(server, { cors: { origin: '*' } });
 
 // set up our PORT
-const MY_PREFERRED_PORT = 5999;
+const MY_PREFERRED_PORT = 6216;
 const PORT = process.env.PORT || MY_PREFERRED_PORT;
 
 // allow cors
