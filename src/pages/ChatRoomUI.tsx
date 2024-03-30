@@ -14,7 +14,7 @@ interface IMessage {
 
 const ChatRoomUI = () => {
   const div = useRef<HTMLDivElement>(null);
-  const ENDPOINT = 'https://80.242.57.33:6216/';
+  const ENDPOINT = 'http://80.242.57.33:6216/';
   const [name, setName] = useState<string>('');
   const [room, setRoom] = useState<string>('');
   const [message, setMessage] = useState<string>('');
