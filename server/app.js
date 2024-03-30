@@ -7,7 +7,10 @@ const {
 } = require('./users');
 
 // configure socket.io to allow cross-origin requests
-const io = socketio(server, { cors: { origin: '*' } });
+const io = socketio(server, { cors: {
+  origin: "*",
+  methods: ["GET", "POST"],
+} });
 
 // set up our PORT
 const MY_PREFERRED_PORT = 6216;
